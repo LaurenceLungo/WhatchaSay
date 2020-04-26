@@ -55,10 +55,10 @@ Then, the features are fed to a K-Means clustering model. The number of cluster 
 <br>
 Finally when a test phrase is given, the program predicts the cluster it belongs to and return all members in the same cluster.
 
-### Findings
-I tried to load a Cantonese corpus to Jieba (the Chinese vocab splitter) for better handling of Cantonese. However, it makes the running time significantly longer. Plus there is no significant improvement on the clustering accuracy. One possible explaination is that the Cantonese corpus makes the splitter create a lot of single-character vocabularies which are not intent-deterministic.\
+## Findings
+I tried to load a Cantonese corpus to Jieba (the Chinese vocab splitter) for better handling of Cantonese. However, it makes the running time significantly longer. Plus there is no significant improvement on the clustering accuracy. One possible explaination is that the Cantonese corpus makes the splitter create a lot of single-character vocabularies which are not intent-deterministic.
 
-### Future improvements
+## Future improvements
 To increase clustering accuracy for English, stemming technique can be applied.
 
 To further increase clustering accuracy for Chinese, the Chinese Corpus can be used to determine the part of speech of vocabularies. Verbs and nouns should be more heavily weighted as a feature beacuse they are a stronger indicater of dialog intent compared to other part of speeches.
