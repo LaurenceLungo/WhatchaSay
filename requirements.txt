@@ -1,0 +1,6 @@
+matplotlib==3.2.1
+numpy==1.18.3
+pandas==1.0.3
+sklearn==0.0
+jieba==0.42.1
+hanziconv==0.3.2
