@@ -1,5 +1,5 @@
 # WhatchaSay
-This is a Python project which clusters a set of dialogs by their meaning.\
+This is a Python project which clusters dialogs by their meaning.\
 <br>
 This project runs on Python3.
 
