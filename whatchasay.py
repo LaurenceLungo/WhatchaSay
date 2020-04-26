@@ -13,6 +13,9 @@ from sklearn.metrics import silhouette_score
 
 def pre_process(text):
     text = HanziConv.toTraditional(text)
+
+    # load cantonese corpus
+    # jb.load_userdict('util/dict/canto_dict.txt')
     vocabs = list(jb.cut(text))
     pp_text = " ".join(vocabs)
     return pp_text
@@ -40,11 +43,6 @@ def find_opt_k(dat, feat):
                 print("--- Found optimal k:", max_silhouette[1], "---")
                 print()
                 return max_silhouette[1]
-    # plt.figure(figsize=(16, 8))
-    # plt.plot(kk, s_score, 'bx-')
-    # plt.xlabel('k')
-    # plt.ylabel('silhouette')
-    # plt.show()
     return max_silhouette[1]
 
 
