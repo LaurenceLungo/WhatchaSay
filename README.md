@@ -56,7 +56,11 @@ The first dialog is the input test phrase, while those following it are the dial
 ## Approach
 The program is optimized for chinese dialogs.\
 <br>
-It first uses a Chinese corpus to split the continuous sentence into a list of vocabularies and converts simplified Chinese characters (if any) to traditional characters. Single-character vocabularies are discarded as they are not intent-deterministic.\
+It first preprocesses the sentences:
++ a Chinese corpus is used to split the continuous sentence into a list of vocabularies.
++ simplified Chinese characters (if any) are converted to traditional characters.
++ single-character vocabularies are discarded as they are not intent-deterministic. 
++ special characters like punctuations, whitespaces and newlines are discarded.
 <br>
 It then **vectorizes** the sentence and generates features from it.\
 <br>
