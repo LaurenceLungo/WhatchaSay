@@ -16,6 +16,7 @@ def pre_process(text):
     # cc = OpenCC('s2hk')
     # text = cc.convert(text)
     text = HanziConv.toTraditional(text)
+    jb.load_userdict('util/dict/dict.txt')
     vocabs = list(jb.cut(text))
     pp_text = " ".join(vocabs)
     return pp_text
@@ -70,28 +71,30 @@ s_score = []
 kk=[]
 max_silhouette = [-1, 0]
 dec_trend = 0
-for k in K:
-    clusterer = KMeans(n_clusters=k, random_state=random_state)
-    preds = clusterer.fit_predict(features)
-    centers = clusterer.cluster_centers_
-    score = silhouette_score(features, preds)
-    s_score.append(score)
-    kk.append(k)
-    print("For n_clusters = {}, silhouette score is {})".format(k, score))
-    if score > max_silhouette[0]:
-        max_silhouette = [score, k]
-    else:
-        dec_trend += 1
-        if dec_trend == 3:
-            print("found optimal k:", max_silhouette[1])
-            break
-plt.figure(figsize=(16, 8))
-plt.plot(kk, s_score, 'bx-')
-plt.xlabel('k')
-plt.ylabel('silhouette')
-plt.show()
+# for k in K:
+#     clusterer = KMeans(n_clusters=k, random_state=random_state)
+#     preds = clusterer.fit_predict(features)
+#     centers = clusterer.cluster_centers_
+#     score = silhouette_score(features, preds)
+#     s_score.append(score)
+#     kk.append(k)
+#     print("For n_clusters = {}, silhouette score is {})".format(k, score))
+#     if score > max_silhouette[0]:
+#         max_silhouette = [score, k]
+#     else:
+#         dec_trend += 1
+#         if dec_trend == 3:
+#             print("found optimal k:", max_silhouette[1])
+#             break
+# plt.figure(figsize=(16, 8))
+# plt.plot(kk, s_score, 'bx-')
+# plt.xlabel('k')
+# plt.ylabel('silhouette')
+# plt.show()
 
-cls = KMeans(n_clusters=max_silhouette[1], random_state=random_state)
+# cls = KMeans(n_clusters=max_silhouette[1], random_state=random_state)
+cls = KMeans(n_clusters=505, random_state=random_state)
+
 cls.fit(features)
 print('pp_text:', pre_process(args_value["test"]))
 prediction = cls.predict(vec.transform([pre_process(args_value["test"])]))
