@@ -44,3 +44,21 @@ The program creates an output file formatted as follows:
 ```
 The first dialog is the input test phrase, while those following it are the dialogs of the same meaning from the training set.
 
+## Approach
+The program is optimized for chinese dialogs.\
+<br>
+It first uses a Chinese corpus to split the continuous sentence into a list of vocabularies and converts simplified Chinese characters (if any) to traditional characters.\
+<br>
+It then vectorizes the sentence and generates features from it.\
+<br>
+Then, the features are fed to a K-Means clustering model. The number of cluster k is auto-determined by the silhouette curve.\
+<br>
+Finally when a test phrase is given, the program predicts the cluster it belongs to and return all members in the same cluster.
+
+## Findings
+I tried to load a Cantonese corpus to Jieba (the Chinese vocab splitter) for better handling of Cantonese. However, it makes the running time significantly longer. Plus there is no significant improvement on the clustering accuracy. One possible explaination is that the Cantonese corpus makes the splitter create a lot of single-character vocabularies which are not intent-deterministic.
+
+## Future improvements
+To increase clustering accuracy for English, stemming technique can be applied.
+
+To further increase clustering accuracy for Chinese, the Chinese Corpus can be used to determine the part of speech of vocabularies. Verbs and nouns should be more heavily weighted as a feature beacuse they are a stronger indicater of dialog intent compared to other part of speeches.
