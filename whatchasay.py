@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import jieba as jb
 from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
 from sklearn.feature_extraction.text import TfidfVectorizer
 from argparse import ArgumentParser
 from time import time
@@ -52,6 +53,7 @@ start_time = time()
 parser = ArgumentParser(description='Clustering text.')
 parser.add_argument('dataset', metavar='d', nargs='?', help='directory to training set')
 parser.add_argument('test', metavar='t', nargs='?', help='test phrase')
+parser.add_argument('-v', action='store_true', help='visualize the clustering result')
 args = parser.parse_args()
 args_value = vars(args)
 
@@ -73,16 +75,20 @@ for i in range(len(cls.labels_)):
     if cls.labels_[i] == prediction:
         output_str += ("\"" + tdf.Enquiry.values[i] + "\"/")
 output_str = output_str.replace('\n', ' ')
-
-# pca = PCA(n_components=2, random_state=random_state)
-# reduced_features = pca.fit_transform(features.toarray())
-
-# # reduce the cluster centers to 2D
-# reduced_cluster_centers = pca.transform(cls.cluster_centers_)
-#
-# plt.scatter(reduced_features[:, 0], reduced_features[:, 1], c=cls.predict(features))
-# plt.scatter(reduced_cluster_centers[:, 0], reduced_cluster_centers[:, 1], marker='x', s=150, c='b')
-# plt.show()
+file = open('output.txt', 'w')
+file.write(output_str)
+file.close()
 
 print("Output:", output_str)
 print("Running time:", time() - start_time, "seconds")
+
+if args.v:
+    pca = PCA(n_components=2, random_state=0)
+    reduced_features = pca.fit_transform(features.toarray())
+
+    # reduce the cluster centers to 2D
+    reduced_cluster_centers = pca.transform(cls.cluster_centers_)
+
+    plt.scatter(reduced_features[:, 0], reduced_features[:, 1], c=cls.predict(features))
+    plt.scatter(reduced_cluster_centers[:, 0], reduced_cluster_centers[:, 1], marker='x', s=150, c='b')
+    plt.show()
