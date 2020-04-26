@@ -1,61 +1,58 @@
+import gensim
+import jieba
 import pandas as pd
-import matplotlib.pyplot as plt
-import jieba as jb
-from sklearn.cluster import KMeans
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.decomposition import PCA
-from argparse import ArgumentParser
+import numpy as np
 from opencc import OpenCC
-from time import time
 
 
-def pre_process(text):
+def read_corpus(para):
+    # with smart_open.open(fname) as f:
+    #     for i, line in enumerate(f):
+    #         tokens = gensim.utils.simple_preprocess(line)
+    #         yield gensim.models.doc2vec.TaggedDocument(tokens, [i])
+    c_para = para.copy()
+    for i in range(len(c_para)):
+        c_para[i] = c_para[i].replace("(previous message:", "")
+        c_para[i] = c_para[i].replace(")", "")
+        c_para[i] = c_para[i].replace('\n', " ")
+        c_para[i] = ' '.join(jieba.cut(c_para[i]))
+    # print(para)
+    for j, line in enumerate(c_para):
+        tokens = gensim.utils.simple_preprocess(line)
+        yield gensim.models.doc2vec.TaggedDocument(tokens, [j])
+
+
+def transform_enquiry(text):
+    text = text.replace("(previous message:", "")
+    text = text.replace(")", "")
+    text = text.replace('\n', " ")
+    # jieba.load_userdict("./util/dict/dict.txt")
+    text = ' '.join(jieba.cut(text))
+    print(text)
     cc = OpenCC('s2hk')
     text = cc.convert(text)
-    vocabs = list(jb.cut(text))
-    pp_text = " ".join(vocabs)
-    return pp_text
+    print(gensim.utils.simple_preprocess(text))
+    return gensim.utils.simple_preprocess(text)
 
 
-ini = time()
-stopwords = [' ', '\n', 'previous', 'message']
-random_state = 0
+para = pd.read_csv('dataset.csv').Enquiry.values
+for k in range(len(para)):
+    line = para[0]
+    np.delete(para, 0)
+    split_line = line.split('\n')
+    para = np.append(para, split_line)
+train_corpus = list(read_corpus(para))
+# print(train_corpus)
 
-parser = ArgumentParser(description='Clustering text.')
-parser.add_argument('dataset', metavar='d', nargs='?',
-                    help='directory to training set')
-parser.add_argument('test', metavar='t', nargs='?',
-                    help='test phrase')
-args = parser.parse_args()
-args_value = vars(args)
+model = gensim.models.doc2vec.Doc2Vec(vector_size=50)
+model.build_vocab(train_corpus)
+model.train(train_corpus, total_examples=model.corpus_count, epochs=model.epochs)
+vector = model.infer_vector(transform_enquiry('點樣收費?'))
+sims = model.docvecs.most_similar([vector])
 
-tdf = pd.read_csv(args_value['dataset'])
+print(sims)
+print()
 
-vec = TfidfVectorizer(stop_words=stopwords, preprocessor=pre_process)
-vec.fit(tdf.Enquiry.values)
-for (k, v) in vec.vocabulary_.items():
-    if len(k) == 1:
-        print(k, ": ", v)
-features = vec.transform(tdf.Enquiry.values)
-
-cls = KMeans(n_clusters=80, random_state=random_state)
-cls.fit(features)
-
-prediction = cls.predict(vec.transform([args_value["test"]]))
-print(prediction)
-for i in range(len(cls.labels_)):
-    if cls.labels_[i] == prediction:
-        print(tdf.Enquiry.values[i])
-        print("------------------------")
-
-pca = PCA(n_components=2, random_state=random_state)
-reduced_features = pca.fit_transform(features.toarray())
-
-# # reduce the cluster centers to 2D
-# reduced_cluster_centers = pca.transform(cls.cluster_centers_)
-#
-# plt.scatter(reduced_features[:, 0], reduced_features[:, 1], c=cls.predict(features))
-# plt.scatter(reduced_cluster_centers[:, 0], reduced_cluster_centers[:, 1], marker='x', s=150, c='b')
-# plt.show()
-
-print("cost:", time() - ini, "seconds")
+for index, conf in sims:
+    print(para[index])
+    print('--------------------------')
