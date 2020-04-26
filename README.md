@@ -3,11 +3,20 @@ This is a Python project which clusters dialogs by their meaning.\
 <br>
 This project runs on Python3.
 
+## Dependencies
++ matplotlib 3.2.1
++ numpy 1.18.3
++ pandas 1.0.3
++ sklearn 0.0
++ jieba 0.42.1
++ hanziconv 0.3.2
+
 ## Installation
 Install all the dependencies from Pypi:
 ```sh
 $ pip install -r requirements.txt
 ```
+
 ## Usage
 To execute the program, run
 ```sh
@@ -47,11 +56,11 @@ The first dialog is the input test phrase, while those following it are the dial
 ## Approach
 The program is optimized for chinese dialogs.\
 <br>
-It first uses a Chinese corpus to split the continuous sentence into a list of vocabularies and converts simplified Chinese characters (if any) to traditional characters.\
+It first uses a Chinese corpus to split the continuous sentence into a list of vocabularies and converts simplified Chinese characters (if any) to traditional characters. Single-character vocabularies are discarded as they are not intent-deterministic.\
 <br>
-It then vectorizes the sentence and generates features from it.\
+It then **vectorizes** the sentence and generates features from it.\
 <br>
-Then, the features are fed to a K-Means clustering model. The number of cluster k is auto-determined by the silhouette curve.\
+Then, the features are fed to a **K-Means** clustering model. The number of cluster k is auto-determined by the **silhouette method**.\
 <br>
 Finally when a test phrase is given, the program predicts the cluster it belongs to and return all members in the same cluster.
 
