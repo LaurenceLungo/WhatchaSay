@@ -63,7 +63,7 @@ It first preprocesses the sentences:
 + special characters like punctuations, whitespaces and newlines are discarded.
 <br>
 
-It then **vectorizes** the sentence and generates features from it.\
+It then vectorizes the sentence and generates features from it.\
 <br>
 Then, the features are fed to a **K-Means** clustering model. The number of cluster k is auto-determined by the **silhouette method**.\
 <br>
