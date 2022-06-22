@@ -5,7 +5,7 @@ This project runs on Python3.
 
 ## Dependencies
 + matplotlib 3.2.1
-+ numpy 1.18.3
++ numpy 1.22.0
 + pandas 1.0.3
 + sklearn 0.0
 + jieba 0.42.1
