@@ -1,5 +1,5 @@
 # WhatchaSay
-This is a Python experiment aimed at clustering dialogs by their meaning.\
+This is an exercise to cluster Chinese dialogs by their semantic meaning.\
 <br>
 This project runs on Python3.
 
