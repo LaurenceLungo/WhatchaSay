@@ -9,7 +9,7 @@
             "type": "python",
             "request": "launch",
             "program": "WhatchaSay.py",
-            "args": ["dataset/text_msg_mini_dataset.csv", "費用"],
+            "args": ["dataset/text_msg_mini_dataset.csv", "請問收費？"],
             "console": "integratedTerminal",
             "justMyCode": true
         }
