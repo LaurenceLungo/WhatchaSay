@@ -53,7 +53,6 @@ start_time = time()
 parser = ArgumentParser(description='Clustering text.')
 parser.add_argument('dataset', metavar='d', nargs='?', help='directory to training set')
 parser.add_argument('test', metavar='t', nargs='?', help='test phrase')
-parser.add_argument('-v', action='store_true', help='visualize the clustering result')
 args = parser.parse_args()
 args_value = vars(args)
 
